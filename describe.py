@@ -11,19 +11,19 @@ def load(path: str) -> pd.DataFrame:
         print(e)
 
 def calculate_discipline(data: pd.DataFrame) -> None:
-    columns = data.columns[6:]
+    feature = data.columns[6:]
     stats = {
-        "Count": [len(data[tmp]) for tmp in columns],
-        "Mean": [get_mean(data[tmp].dropna()) for tmp in columns],
-        "Std": [get_std(get_var(data[tmp].dropna(), get_mean(data[tmp].dropna()))) for tmp in columns],
-        "Min": [get_min(data[tmp].dropna()) for tmp in columns],
-        "25%": [get_25_percentile(data[tmp].dropna()) for tmp in columns],
-        "50%": [get_50_percentile(data[tmp].dropna()) for tmp in columns],
-        "75%": [get_75_percentile(data[tmp].dropna()) for tmp in columns],
-        "Max": [get_max(data[tmp].dropna()) for tmp in columns]
+        "Count": [len(data[tmp]) for tmp in feature],
+        "Mean": [get_mean(data[tmp].dropna()) for tmp in feature],
+        "Std": [get_std(get_var(data[tmp].dropna(), get_mean(data[tmp].dropna()))) for tmp in feature],
+        "Min": [get_min(data[tmp].dropna()) for tmp in feature],
+        "25%": [get_25_percentile(data[tmp].dropna()) for tmp in feature],
+        "50%": [get_50_percentile(data[tmp].dropna()) for tmp in feature],
+        "75%": [get_75_percentile(data[tmp].dropna()) for tmp in feature],
+        "Max": [get_max(data[tmp].dropna()) for tmp in feature]
     }
-    for i in range(0, len(columns), 8):
-        tmp = columns[i:i+8]
+    for i in range(0, len(feature), 8):
+        tmp = feature[i:i+8]
 
         print(f"{'':<10}", end="")
         for c in tmp:
@@ -86,23 +86,12 @@ def get_std(variance: float):
     """Return the standard deviation from the given variance."""
     return variance ** 0.5
 
-def histogram(data: pd.DataFrame):
-    columns = data.columns[6:]
-    houses = data.groupby("Hogwarts House")
-    stds = []
-    disciplines = [data[columns] for columns in columns]
-    for house, x in houses:
-        .
-
 def main():
     try:
-        if (len(sys.argv) != 2):
-            raise Exception("Only one argument is allowed.")
-        data = load(sys.argv[1])
+        data = load("data_train.csv")
         calculate_discipline(data)
-        print(f"oups: {histogram(data)}")
     except Exception as e:
-        print(f"merde !{e}")    
+        print(f"Error: {e}")    
 
 if __name__ == "__main__":
     main()

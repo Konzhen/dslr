@@ -1,10 +1,27 @@
-from describe import get_var, get_mean
+from describe import load, get_min, get_std, get_var, get_mean
+import sys
 import pandas as pd
 
-def histogram(data: pd.DataFrame) -> float:
+def histogram(data: pd.DataFrame):
     columns = data.columns[6:]
-    tmp = get_var(get_mean(data[columns[0]].dropna()))
-    for i in range(len(columns)):
-        n = get_var(get_mean(data[tmp].dropna()))
-        tmp = n if n < tmp else tmp
-    return tmp
+    houses = data.groupby("Hogwarts House")
+    homogeneous_houses = {}
+    for house, data_house in houses:
+        row = []
+        for feature in columns:
+            value = get_std(get_var(data_house[feature].dropna(), get_mean(data_house[feature].dropna())))
+            row.append(value)
+        value = get_std(get_var(row, get_mean(row)))
+        homogeneous_houses[house] = value
+    print(f"The house with the most homogeneous score is: {get_min(homogeneous_houses)}")
+
+def main():
+    try :
+        data = load("datasets/dataset_train.csv")
+        histogram(data)
+    except Exception as e:
+        print(f"Error: {e}")    
+
+
+if __name__ == "__main__":
+    main()
