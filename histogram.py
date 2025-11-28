@@ -1,4 +1,4 @@
-from describe import load, get_min, get_std, get_var, get_mean
+from describe import load, ft_min, ft_std, ft_var, ft_mean
 import sys
 import pandas as pd
 
@@ -9,11 +9,11 @@ def histogram(data: pd.DataFrame):
     for house, data_house in houses:
         row = []
         for feature in columns:
-            value = get_std(get_var(data_house[feature].dropna(), get_mean(data_house[feature].dropna())))
+            value = ft_std(ft_var(data_house[feature].dropna(), ft_mean(data_house[feature].dropna())))
             row.append(value)
-        value = get_std(get_var(row, get_mean(row)))
+        value = ft_std(ft_var(row, ft_mean(row)))
         homogeneous_houses[house] = value
-    print(f"The house with the most homogeneous score is: {get_min(homogeneous_houses)}")
+    print(f"The house with the most homogeneous score is: {ft_min(homogeneous_houses)}")
 
 def main():
     try :
